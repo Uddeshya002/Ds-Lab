@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+struct Sparse {
+    int row, col, val;
+};
+
+int main() {
+    Sparse A[100], B[100], Result[100];
+    int m, n, t1, t2;
+
+    cout << "Enter rows, cols and non-zero values for Matrix A: ";
+    cin >> A[0].row >> A[0].col >> A[0].val;
+    t1 = A[0].val;
+
+    cout << "Enter A matrix triplets:\n";
+    for (int i = 1; i <= t1; i++) {
+        cin >> A[i].row >> A[i].col >> A[i].val;
+    }
+
+    cout << "Enter rows, cols and non-zero values for Matrix B: ";
+    cin >> B[0].row >> B[0].col >> B[0].val;
+    t2 = B[0].val;
+
+    cout << "Enter B matrix triplets:\n";
+    for (int i = 1; i <= t2; i++) {
+        cin >> B[i].row >> B[i].col >> B[i].val;
+    }
+
+    if (A[0].row != B[0].row || A[0].col != B[0].col) {
+        cout << "Matrix dimensions don't match. Can't add.\n";
+        return 0;
+    }
+
+    Result[0].row = A[0].row;
+    Result[0].col = A[0].col;
+
+    int i = 1, j = 1, k = 1;
+
+    while (i <= t1 && j <= t2) {
+        if (A[i].row == B[j].row && A[i].col == B[j].col) {
+            Result[k] = {A[i].row, A[i].col, A[i].val + B[j].val};
+            i++; j++;
+        } else if (A[i].row < B[j].row || (A[i].row == B[j].row && A[i].col < B[j].col)) {
+            Result[k] = A[i];
+            i++;
+        } else {
+            Result[k] = B[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i <= t1) Result[k++] = A[i++];
+    while (j <= t2) Result[k++] = B[j++];
+
+    Result[0].val = k - 1;
+
+    cout << "\nResult after addition:\n";
+    cout << "Row Col Value\n";
+    for (int i = 0; i <= Result[0].val; i++) {
+        cout << Result[i].row << "   " << Result[i].col << "   " << Result[i].val << "\n";
+    }
+
+    return 0;
+}
