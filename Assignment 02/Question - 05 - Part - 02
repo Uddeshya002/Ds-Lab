@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+
+class TriDiagonalMatrix {
+    int* lowerDiagonal;  
+    int* mainDiagonal;   
+    int* upperDiagonal;  
+    int size;
+
+public:
+    TriDiagonalMatrix(int n) {
+        size = n;
+        lowerDiagonal = new int[size - 1];
+        mainDiagonal = new int[size];
+        upperDiagonal = new int[size - 1];
+    }
+
+    ~TriDiagonalMatrix() {
+        delete[] lowerDiagonal;
+        delete[] mainDiagonal;
+        delete[] upperDiagonal;
+    }
+
+    void setValue(int row, int col, int value) {
+        if (row == col) {
+            mainDiagonal[row - 1] = value;
+        }
+        else if (row == col + 1) {
+            lowerDiagonal[col - 1] = value;
+        }
+        else if (col == row + 1) {
+            upperDiagonal[row - 1] = value;
+        }
+        else if (value != 0) {
+            cout << "Only tri-diagonal positions can have non-zero values!" << endl;
+        }
+    }
+
+    int getValue(int row, int col) {
+        if (row == col)
+            return mainDiagonal[row - 1];
+        else if (row == col + 1)
+            return lowerDiagonal[col - 1];
+        else if (col == row + 1)
+            return upperDiagonal[row - 1];
+        else
+            return 0;
+    }
+
+    void display() {
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
+                cout << getValue(i, j) << " ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the dimension of the tri-diagonal matrix: ";
+    cin >> n;
+
+    TriDiagonalMatrix matrix(n);
+
+    cout << "Enter " << n << " elements of the main diagonal:\n";
+    for (int i = 1; i <= n; i++) {
+        int val; cin >> val;
+        matrix.setValue(i, i, val);
+    }
+
+    cout << "Enter " << n - 1 << " elements of the lower diagonal:\n";
+    for (int i = 2; i <= n; i++) {
+        int val; cin >> val;
+        matrix.setValue(i, i - 1, val);
+    }
+
+    cout << "Enter " << n - 1 << " elements of the upper diagonal:\n";
+    for (int i = 1; i <= n - 1; i++) {
+        int val; cin >> val;
+        matrix.setValue(i, i + 1, val);
+    }
+
+    cout << "\nThe full tri-diagonal matrix:\n";
+    matrix.display();
+
+    return 0;
+}
