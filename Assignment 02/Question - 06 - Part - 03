@@ -1,0 +1,70 @@
+#include <iostream>
+using namespace std;
+
+struct Entry {
+    int row, col, val;
+};
+
+int findVal(Entry A[], int sizeA, int r, int c) {
+    for (int i = 1; i <= sizeA; i++) {
+        if (A[i].row == r && A[i].col == c)
+            return A[i].val;
+    }
+    return 0;
+}
+
+int main() {
+    Entry A[100], B[100], Result[100];
+    int t1, t2;
+
+    cout << "Enter Matrix A (rows cols non-zero): ";
+    cin >> A[0].row >> A[0].col >> A[0].val;
+    t1 = A[0].val;
+
+    cout << "Enter A triplets:\n";
+    for (int i = 1; i <= t1; i++) {
+        cin >> A[i].row >> A[i].col >> A[i].val;
+    }
+
+    cout << "Enter Matrix B (rows cols non-zero): ";
+    cin >> B[0].row >> B[0].col >> B[0].val;
+    t2 = B[0].val;
+
+    cout << "Enter B triplets:\n";
+    for (int i = 1; i <= t2; i++) {
+        cin >> B[i].row >> B[i].col >> B[i].val;
+    }
+
+    if (A[0].col != B[0].row) {
+        cout << "Cannot multiply: Incompatible dimensions.\n";
+        return 0;
+    }
+
+    int k = 1;
+    Result[0].row = A[0].row;
+    Result[0].col = B[0].col;
+
+    for (int i = 0; i < A[0].row; i++) {
+        for (int j = 0; j < B[0].col; j++) {
+            int sum = 0;
+            for (int x = 0; x < A[0].col; x++) {
+                int valA = findVal(A, t1, i, x);
+                int valB = findVal(B, t2, x, j);
+                sum += valA * valB;
+            }
+            if (sum != 0) {
+                Result[k++] = {i, j, sum};
+            }
+        }
+    }
+
+    Result[0].val = k - 1;
+
+    cout << "\nProduct Matrix (Triplet Form):\n";
+    cout << "Row Col Value\n";
+    for (int i = 0; i <= Result[0].val; i++) {
+        cout << Result[i].row << "   " << Result[i].col << "   " << Result[i].val << "\n";
+    }
+
+    return 0;
+}
