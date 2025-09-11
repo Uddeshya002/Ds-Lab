@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+
+class LowerTriMatrix {
+    int* arr;   
+    int n;
+
+public:
+    LowerTriMatrix(int size) {
+        n = size;
+        arr = new int[(n * (n + 1)) / 2];
+    }
+
+    ~LowerTriMatrix() {
+        delete[] arr;
+    }
+
+    void insert(int row, int col, int val) {
+        if (row >= col) {
+            
+            int pos = (row * (row - 1)) / 2 + (col - 1);
+            arr[pos] = val;
+        } else if (val != 0) {
+            cout << "Warning: Elements above main diagonal should be zero!" << endl;
+        }
+    }
+
+    int retrieve(int row, int col) {
+        if (row >= col) {
+            int pos = (row * (row - 1)) / 2 + (col - 1);
+            return arr[pos];
+        }
+        return 0;
+    }
+
+    void printMatrix() {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                cout << retrieve(i, j) << " ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    int dimension;
+    cout << "Size of the lower triangular matrix? ";
+    cin >> dimension;
+
+    LowerTriMatrix mat(dimension);
+
+    cout << "Input elements for the lower triangle (including diagonal):\n";
+    for (int i = 1; i <= dimension; i++) {
+        for (int j = 1; j <= i; j++) {
+            int val; cin >> val;
+            mat.insert(i, j, val);
+        }
+    }
+
+    cout << "\nYour full matrix:\n";
+    mat.printMatrix();
+
+    return 0;
+}
