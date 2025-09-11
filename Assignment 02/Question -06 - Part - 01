@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+struct SparseEntry {
+    int row;
+    int col;
+    int val;
+};
+
+int main() {
+    SparseEntry mat[100], transposed[100];
+    int total;
+
+    cout << "Enter number of rows, columns and non-zero elements: ";
+    cin >> mat[0].row >> mat[0].col >> mat[0].val;
+
+    total = mat[0].val;
+
+    cout << "Enter the sparse matrix in triplet form (row column value):\n";
+    for (int i = 1; i <= total; i++) {
+        cin >> mat[i].row >> mat[i].col >> mat[i].val;
+    }
+
+    // Initialize header for transpose
+    transposed[0].row = mat[0].col;
+    transposed[0].col = mat[0].row;
+    transposed[0].val = mat[0].val;
+
+    int k = 1;
+    for (int c = 0; c < mat[0].col; c++) {
+        for (int i = 1; i <= total; i++) {
+            if (mat[i].col == c) {
+                transposed[k].row = mat[i].col;
+                transposed[k].col = mat[i].row;
+                transposed[k].val = mat[i].val;
+                k++;
+            }
+        }
+    }
+
+    cout << "\nTransposed Matrix (Triplet Form):\n";
+    cout << "Row Col Value\n";
+    for (int i = 0; i <= total; i++) {
+        cout << transposed[i].row << "   " << transposed[i].col << "   " << transposed[i].val << "\n";
+    }
+
+    return 0;
+}
