@@ -1,1 +1,84 @@
+#include <iostream>
+using namespace std;
 
+const int MAX = 100;
+
+class Stack {
+    int top;
+    int arr[MAX];
+
+public:
+    Stack() { top = -1; }
+
+    bool isFull()  { return top == MAX - 1; }
+    bool isEmpty() { return top == -1; }
+
+    void pushElement(int value) {
+        if (isFull())
+            cout << " Stack Overflow! Cannot insert " << value << endl;
+        else {
+            arr[++top] = value;
+            cout << value << " inserted successfully \n";
+        }
+    }
+
+    void popElement() {
+        if (isEmpty())
+            cout << " Stack Underflow! Nothing to remove\n";
+        else
+            cout << arr[top--] << " removed successfully \n";
+    }
+
+    void viewTop() {
+        if (isEmpty())
+            cout << "Stack is empty\n";
+        else
+            cout << "Top element → " << arr[top] << endl;
+    }
+
+    void showStack() {
+        if (isEmpty()) {
+            cout << "Stack is empty\n";
+        } else {
+            cout << "Stack elements (Top → Bottom): ";
+            for (int i = top; i >= 0; i--) cout << arr[i] << " ";
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Stack st;
+    int choice, val;
+
+    do {
+        cout << "\n====== STACK MENU ======\n";
+        cout << "1. Push\n2. Pop\n3. Peek\n4. Display\n5. Exit\n";
+        cout << "Choose option: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> val;
+                st.pushElement(val);
+                break;
+            case 2:
+                st.popElement();
+                break;
+            case 3:
+                st.viewTop();
+                break;
+            case 4:
+                st.showStack();
+                break;
+            case 5:
+                cout << "Exiting... \n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
