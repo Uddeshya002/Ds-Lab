@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+class LowerTriangular {
+    int* storage;
+    int length;
+
+public:
+    LowerTriangular(int size) {
+        length = size;
+        storage = new int[(length * (length + 1)) / 2];
+    }
+
+    ~LowerTriangular() {
+        delete[] storage;
+    }
+    
+    void assign(int r, int c, int value) {
+        if (r >= c) {
+            int idx = (r * (r - 1)) / 2 + (c - 1);  
+            storage[idx] = value;
+        } else if (value != 0) {
+            cout << "Error: Only lower triangle elements can be non-zero!" << endl;
+        }
+    }
+
+  
+    int get(int r, int c) {
+        if (r >= c) {
+            int idx = (r * (r - 1)) / 2 + (c - 1);
+            return storage[idx];
+        }
+        return 0;
+    }
+
+    void displayMatrix() {
+        for (int row = 1; row <= length; ++row) {
+            for (int col = 1; col <= length; ++col) {
+                cout << get(row, col) << " ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    int n;
+    cout << "Matrix dimension: ";
+    cin >> n;
+
+    LowerTriangular matrix(n);
+
+    cout << "Enter values for the lower triangle (including diagonal):\n";
+    for (int row = 1; row <= n; ++row) {
+        for (int col = 1; col <= row; ++col) {
+            int val;
+            cin >> val;
+            matrix.assign(row, col, val);
+        }
+    }
+
+    cout << "\nComplete matrix:\n";
+    matrix.displayMatrix();
+
+    return 0;
+}
