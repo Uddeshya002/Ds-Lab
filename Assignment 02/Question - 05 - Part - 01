@@ -1,0 +1,70 @@
+#include <iostream>
+using namespace std;
+
+class DiagonalMat {
+    int* data;  
+    int dim;   
+
+public:
+    DiagonalMat(int n) {
+        dim = n;
+        data = new int[dim]; 
+    }
+
+    ~DiagonalMat() {
+        delete[] data;
+    }
+    
+    void put(int i, int j, int val) {
+        if (i == j) {
+            data[i - 1] = val;
+        } else if (val != 0) {
+            cout << "Off-diagonal position must be zero!" << endl;
+        }
+    }
+    
+    int fetch(int i, int j) {
+        if (i == j)
+            return data[i - 1];
+        else
+            return 0;
+    }
+
+    void showMatrix() {
+        for (int r = 1; r <= dim; ++r) {
+            for (int c = 1; c <= dim; ++c) {
+                if (r == c)
+                    cout << data[r - 1] << " ";
+                else
+                    cout << "0 ";
+            }
+            cout << "\n";
+        }
+    }
+};
+
+int main() {
+    int size;
+    cout << "Enter the size of the diagonal matrix: ";
+    cin >> size;
+
+    DiagonalMat matrix(size);
+
+    cout << "Enter the diagonal elements:\n";
+    for (int idx = 1; idx <= size; ++idx) {
+        int val;
+        cin >> val;
+        matrix.put(idx, idx, val);
+    }
+
+    cout << "\nThe matrix is:\n";
+    matrix.showMatrix();
+
+    int row, col;
+    cout << "\nEnter the position (row and column) of the element you want to fetch: ";
+    cin >> row >> col;
+
+    cout << "The element at that position is: " << matrix.fetch(row, col) << endl;
+
+    return 0;
+}
