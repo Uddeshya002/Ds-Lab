@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for Circular Linked List
+struct CNode {
+    int data;
+    struct CNode* next;
+};
+
+// Function to create a new node
+struct CNode* createCNode(int data) {
+    struct CNode* newNode = (struct CNode*)malloc(sizeof(struct CNode));
+    newNode->data = data;
+    newNode->next = newNode; // Initially points to itself
+    return newNode;
+}
+
+// Function to insert at the end of circular linked list
+void insertEndCircular(struct CNode** head, int data) {
+    struct CNode* newNode = createCNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct CNode* temp = *head;
+    while (temp->next != *head)
+        temp = temp->next;
+    temp->next = newNode;
+    newNode->next = *head;
+}
+
+// Function to find size of Circular Linked List
+int getCircularLinkedListSize(struct CNode* head) {
+    if (head == NULL) return 0;
+    int count = 1;
+    struct CNode* temp = head->next;
+    while (temp != head) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int main() {
+    struct CNode* head = NULL;
+
+    // Inserting some elements
+    insertEndCircular(&head, 5);
+    insertEndCircular(&head, 15);
+    insertEndCircular(&head, 25);
+
+    printf("Size of Circular Linked List: %d\n", getCircularLinkedListSize(head));
+
+    return 0;
+}
