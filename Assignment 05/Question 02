@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* head = nullptr;
+
+// Insert at end (helper to create list easily)
+void insertAtEnd(int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = nullptr;
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Count and delete occurrences of a given key
+int countAndDeleteOccurrences(int key) {
+    int count = 0;
+
+    // Delete occurrences at the beginning
+    while (head != nullptr && head->data == key) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        count++;
+    }
+
+    // Delete occurrences in the rest of the list
+    Node* curr = head;
+    Node* prev = nullptr;
+
+    while (curr != nullptr) {
+        if (curr->data == key) {
+            count++;
+            Node* temp = curr;
+            prev->next = curr->next;
+            curr = curr->next;
+            delete temp;
+        } else {
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+
+    return count;
+}
+
+// Display list
+void displayList() {
+    if (head == nullptr) {
+        cout << "Linked List is empty.";
+        return;
+    }
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data;
+        if (temp->next != nullptr)
+            cout << "->";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    int n, val, key;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> val;
+        insertAtEnd(val);
+    }
+
+    cout << "Enter key to delete: ";
+    cin >> key;
+
+    cout << "Original Linked List: ";
+    displayList();
+
+    int count = countAndDeleteOccurrences(key);
+    cout << "Count: " << count << endl;
+
+    cout << "Updated Linked List: ";
+    displayList();
+
+    return 0;
+}
