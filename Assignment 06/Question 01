@@ -1,0 +1,229 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+};
+
+Node* head = nullptr;
+
+// Helper: Check if list is empty
+bool isEmpty() {
+    return head == nullptr;
+}
+
+// Display the list
+void displayList() {
+    if (isEmpty()) {
+        cout << "List is empty.\n";
+        return;
+    }
+    Node* temp = head;
+    cout << "List: ";
+    do {
+        cout << temp->data;
+        if (temp->next != head) cout << " <-> ";
+        temp = temp->next;
+    } while (temp != head);
+    cout << endl;
+}
+
+// (a) Insertion at beginning
+void insertAtBeginning(int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+
+    if (head == nullptr) {
+        newNode->next = newNode;
+        newNode->prev = newNode;
+        head = newNode;
+    } else {
+        Node* last = head->prev;
+        newNode->next = head;
+        newNode->prev = last;
+        last->next = newNode;
+        head->prev = newNode;
+        head = newNode;
+    }
+    cout << value << " inserted at beginning.\n";
+}
+
+// (a) Insertion at end
+void insertAtEnd(int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+
+    if (head == nullptr) {
+        newNode->next = newNode;
+        newNode->prev = newNode;
+        head = newNode;
+    } else {
+        Node* last = head->prev;
+        newNode->next = head;
+        newNode->prev = last;
+        last->next = newNode;
+        head->prev = newNode;
+    }
+    cout << value << " inserted at end.\n";
+}
+
+// (a) Insert before or after a specific node
+void insertBeforeAfter(int target, int value, bool insertAfter) {
+    if (isEmpty()) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    Node* temp = head;
+    do {
+        if (temp->data == target) {
+            Node* newNode = new Node();
+            newNode->data = value;
+            if (insertAfter) {
+                Node* nxt = temp->next;
+                newNode->next = nxt;
+                newNode->prev = temp;
+                temp->next = newNode;
+                nxt->prev = newNode;
+                cout << value << " inserted after " << target << ".\n";
+            } else {
+                Node* prv = temp->prev;
+                newNode->next = temp;
+                newNode->prev = prv;
+                prv->next = newNode;
+                temp->prev = newNode;
+                if (temp == head) head = newNode;  // inserted before head
+                cout << value << " inserted before " << target << ".\n";
+            }
+            return;
+        }
+        temp = temp->next;
+    } while (temp != head);
+
+    cout << "Node " << target << " not found.\n";
+}
+
+// (b) Delete specific node by value
+void deleteNode(int value) {
+    if (isEmpty()) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    Node* temp = head;
+    Node* toDelete = nullptr;
+
+    do {
+        if (temp->data == value) {
+            toDelete = temp;
+            break;
+        }
+        temp = temp->next;
+    } while (temp != head);
+
+    if (toDelete == nullptr) {
+        cout << "Node " << value << " not found.\n";
+        return;
+    }
+
+    if (toDelete->next == toDelete) {
+        // only one node
+        head = nullptr;
+    } else {
+        Node* prevNode = toDelete->prev;
+        Node* nextNode = toDelete->next;
+        prevNode->next = nextNode;
+        nextNode->prev = prevNode;
+        if (toDelete == head) {
+            head = nextNode;
+        }
+    }
+
+    cout << "Deleted node with value " << value << ".\n";
+    delete toDelete;
+}
+
+// (c) Search node
+void searchNode(int value) {
+    if (isEmpty()) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    Node* temp = head;
+    int pos = 1;
+    do {
+        if (temp->data == value) {
+            cout << "Node " << value << " found at position " << pos << ".\n";
+            return;
+        }
+        temp = temp->next;
+        pos++;
+    } while (temp != head);
+
+    cout << "Node " << value << " not found in list.\n";
+}
+
+// ================== Main Menu ==================
+int main() {
+    int choice, value, target;
+    bool after;
+
+    do {
+        cout << "\n===== Circular / Doubly Linked List Menu =====\n";
+        cout << "1. Insert at Beginning\n";
+        cout << "2. Insert at End\n";
+        cout << "3. Insert Before/After a Node\n";
+        cout << "4. Delete Specific Node\n";
+        cout << "5. Search Node\n";
+        cout << "6. Display List\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert: ";
+                cin >> value;
+                insertAtBeginning(value);
+                break;
+            case 2:
+                cout << "Enter value to insert: ";
+                cin >> value;
+                insertAtEnd(value);
+                break;
+            case 3:
+                cout << "Enter target value: ";
+                cin >> target;
+                cout << "Enter value to insert: ";
+                cin >> value;
+                cout << "Insert after (1) or before (0)? ";
+                cin >> after;
+                insertBeforeAfter(target, value, after);
+                break;
+            case 4:
+                cout << "Enter value to delete: ";
+                cin >> value;
+                deleteNode(value);
+                break;
+            case 5:
+                cout << "Enter value to search: ";
+                cin >> value;
+                searchNode(value);
+                break;
+            case 6:
+                displayList();
+                break;
+            case 7:
+                cout << "Exiting program...\n";
+                break;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
