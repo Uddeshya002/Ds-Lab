@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+class MaxHeap{
+public:
+    int h[100],sz;
+    MaxHeap(){sz=0;}
+    void insert(int x){
+        int i=sz++;
+        h[i]=x;
+        while(i>0&&h[(i-1)/2]<h[i]){
+            swap(h[i],h[(i-1)/2]);
+            i=(i-1)/2;
+        }
+    }
+    void heapify(int i){
+        int l=2*i+1,r=2*i+2,m=i;
+        if(l<sz&&h[l]>h[m]) m=l;
+        if(r<sz&&h[r]>h[m]) m=r;
+        if(m!=i){ swap(h[i],h[m]); heapify(m); }
+    }
+    int extractMax(){
+        int t=h[0];
+        h[0]=h[--sz];
+        heapify(0);
+        return t;
+    }
+};
+
+int main(){
+    MaxHeap pq;
+    pq.insert(10);
+    pq.insert(40);
+    pq.insert(30);
+    cout<<pq.extractMax();
+}
+ 
