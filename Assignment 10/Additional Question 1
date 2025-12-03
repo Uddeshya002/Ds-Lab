@@ -1,0 +1,23 @@
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    int arr[] = {1, 2, 2, 4, 1};
+    int n = 5;
+
+    unordered_map<int, int> freq;
+    for(int x : arr) freq[x]++;
+
+    int ans = -1, maxFreq = 0;
+    for(auto &p : freq) {
+        if(p.second > maxFreq ||
+           (p.second == maxFreq && p.first > ans)) {
+            ans = p.first;
+            maxFreq = p.second;
+        }
+    }
+
+    cout << ans;
+    return 0;
+}
