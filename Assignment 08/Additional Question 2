@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct Node{
+    int data;
+    Node *left,*right;
+    Node(int v):data(v),left(NULL),right(NULL){}
+};
+
+vector<Node*> solve(int l,int r){
+    vector<Node*> v;
+    if(l>r){ v.push_back(NULL); return v; }
+    for(int i=l;i<=r;i++){
+        vector<Node*> L=solve(l,i-1);
+        vector<Node*> R=solve(i+1,r);
+        for(auto a:L) for(auto b:R){
+            Node* n=new Node(i);
+            n->left=a;
+            n->right=b;
+            v.push_back(n);
+        }
+    }
+    return v;
+}
+
+vector<Node*> generateTrees(int n){
+    return solve(1,n);
+}
+
+int main(){
+    int n=3;
+    auto v=generateTrees(n);
+    cout<<v.size();
+}
