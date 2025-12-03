@@ -1,0 +1,37 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+struct Node{
+    int data;
+    Node *left,*right;
+    Node(int v):data(v),left(NULL),right(NULL){}
+};
+
+Node* build(vector<int>& a){
+    if(a[0]==-1) return NULL;
+    Node* r=new Node(a[0]);
+    queue<Node*> q;
+    q.push(r);
+    int i=1;
+    while(!q.empty() && i<a.size()){
+        Node* c=q.front(); q.pop();
+        if(a[i]!=-1){ c->left=new Node(a[i]); q.push(c->left); }
+        i++;
+        if(i<a.size() && a[i]!=-1){ c->right=new Node(a[i]); q.push(c->right); }
+        i++;
+    }
+    return r;
+}
+
+int maxDepth(Node* r){
+    if(!r) return 0;
+    return 1+max(maxDepth(r->left),maxDepth(r->right));
+}
+
+int main(){
+    vector<int> a={1,2,3,4,5,6,-1,-1,-1,7,-1,8};
+    Node* r=build(a);
+    cout<<maxDepth(r);
+}
