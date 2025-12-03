@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+struct Node{
+    int data;
+    Node *left,*right;
+    Node(int v):data(v),left(NULL),right(NULL){}
+};
+
+Node* build(vector<int>& in,int il,int ir,vector<int>& post,int pl,int pr,unordered_map<int,int>& mp){
+    if(il>ir||pl>pr) return NULL;
+    Node* r=new Node(post[pr]);
+    int k=mp[post[pr]];
+    int L=k-il;
+    r->left=build(in,il,k-1,post,pl,pl+L-1,mp);
+    r->right=build(in,k+1,ir,post,pl+L,pr-1,mp);
+    return r;
+}
+
+int main(){
+    vector<int> in={4,2,5,1,3};
+    vector<int> post={4,5,2,3,1};
+    unordered_map<int,int> mp;
+    for(int i=0;i<in.size();i++) mp[in[i]]=i;
+    Node* r=build(in,0,in.size()-1,post,0,post.size()-1,mp);
+    cout<<r->data;
+}
