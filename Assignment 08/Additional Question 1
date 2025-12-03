@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node *left,*right;
+    Node(int v):data(v),left(NULL),right(NULL){}
+};
+
+int solve(Node* r,bool isLeft){
+    if(!r) return 0;
+    if(!r->left && !r->right) return isLeft ? r->data : 0;
+    return solve(r->left,true)+solve(r->right,false);
+}
+
+int sumOfLeftLeaves(Node* r){
+    return solve(r,false);
+}
+
+int main(){
+    Node* r=new Node(3);
+    r->left=new Node(9);
+    r->right=new Node(20);
+    r->right->left=new Node(15);
+    r->right->right=new Node(7);
+    cout<<sumOfLeftLeaves(r);
+}
